@@ -12,6 +12,7 @@ const cors = require("cors")
 mongoose
   .connect(process.env.DB_CONNECT,{
     useUnifiedTopology:true,
+    useNewUrlParser: true,
   })
   .then(()=>{
     console.log("Connect to Atlas Database")
