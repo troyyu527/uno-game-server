@@ -23,6 +23,11 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
+
+app.get("/",(req,res)=>{
+  res.send("Welcome to use Troy's UNO-GAME-SERVER")
+})
+
 app.use("/api/user",authRoute)
 //Use passport to protect all routes after /api
 app.use("/api",passport.authenticate("jwt",{session:false}),itemRoute)
