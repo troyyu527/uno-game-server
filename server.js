@@ -1,48 +1,37 @@
-const path = require("path");
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
+const authRoute = require("./routes").auth;
+const itemRoute = require("./routes").item;
+const passport = require("passport");
+require("./config/passport")(passport);
+const cors = require("cors")
+//connect to DB
+mongoose
+  .connect(process.env.DB_CONNECT,{
+    useUnifiedTopology:true,
+  })
+  .then(()=>{
+    console.log("Connect to Atlas Database")
+  })
+  .catch((e)=>{
+    console.log(e)
+  })
 
-// Require the fastify framework and instantiate it
-const fastify = require("fastify")({
-  // set this to true for detailed logging:
-  logger: false,
-});
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.use(cors())
+app.use("/api/user",authRoute)
+//Use passport to protect all routes after /api
+app.use("/api",passport.authenticate("jwt",{session:false}),itemRoute)
 
-// Setup our static files
-fastify.register(require("@fastify/static"), {
-  root: path.join(__dirname, "public"),
-  prefix: "/", // optional: default '/'
-});
-
-// fastify-formbody lets us parse incoming forms
-fastify.register(require("@fastify/formbody"));
-
-// point-of-view is a templating manager for fastify
-fastify.register(require("@fastify/view"), {
-  engine: {
-    handlebars: require("handlebars"),
-  },
-});
-
-// Our main GET home page route, pulls from src/pages/index.hbs
-fastify.get("/", function (request, reply) {
-  // params is an object we'll pass to our handlebars template
-  let params = {
-    greeting: "Hello Node!",
-  };
-  // request.query.paramName <-- a querystring example
-  return reply.view("/src/pages/index.hbs", params);
-});
-
-// A POST route to handle form submissions
-fastify.post("/", function (request, reply) {
-  let params = {
-    greeting: "Hello Form!",
-  };
-  // request.body.paramName <-- a form post example
-  return reply.view("/src/pages/index.hbs", params);
-});
-
+// app.listen(8080,()=>{
+//   console.log("Server is running on port 8080")
+// })
 // Run the server and report out to the logs
-fastify.listen(
+app.listen(
   { port: process.env.PORT, host: "0.0.0.0" },
   function (err, address) {
     if (err) {
