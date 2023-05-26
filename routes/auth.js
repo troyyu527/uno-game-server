@@ -55,7 +55,7 @@ router.post("/login",async (req,res)=>{
       if(isMatch){
         const tokenObj = {_id:user._id,email:user.email};
         const token = jwt.sign(tokenObj,process.env.PASSPORT_SECRET)
-        res.send({success:true,token:"JWT "+token,user})
+        res.send({success:true,token:"JWT "+token,data:user.username})
       }else{
         res.status(401).send("Wrong password.")
       }
