@@ -27,6 +27,13 @@ const itemValidation = (data) =>{
   return schema.validate(data);
 }
 
+const dataValidation = (data) =>{
+  const schema = joi.object({
+    user:joi.string().required(),
+  });
+  return schema.validate(data);
+}
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.itemValidation = itemValidation;
+module.exports.dataValidation = dataValidation;

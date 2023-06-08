@@ -19,7 +19,13 @@ const gameDataSchema = new mongoose.Schema({
   p1:{
     type:Array,
   },
-  main:{
+  p2:{
+    type:Array,
+  },
+  p3:{
+    type:Array,
+  },
+  p4:{
     type:Array,
   },
 })
