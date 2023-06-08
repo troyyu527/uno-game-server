@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const authRoute = require("./routes").auth;
 const itemRoute = require("./routes").item;
+const dataRoute = require("./routes").data;
 const passport = require("passport");
 require("./config/passport")(passport);
 const cors = require("cors")
@@ -30,8 +31,10 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/user",authRoute);
+app.use("/api/gameData",dataRoute);
 //Use passport to protect all routes after /api
 app.use("/api",passport.authenticate("jwt",{session:false}),itemRoute);
+
 
 // Run the server and report out to the logs
 app.listen({ port: process.env.PORT, host: "0.0.0.0" },()=>{
