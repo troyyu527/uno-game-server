@@ -8,7 +8,6 @@ router.use((req,res,next)=>{
 });
 router.get("/",(req,res)=>{
   Data.find({})
-    .populate("liked",["username","email"])
     .then((obj)=>{
       res.send(obj);
     })
@@ -16,49 +15,43 @@ router.get("/",(req,res)=>{
       res.status(500).send(err)
     })
 })
-router.get("/:_id",(req,res)=>{
+router.get("/:_user",(req,res)=>{
   console.log("hello")
-  let {_id} = req.params
-  Item.findOne({_id})
-    .populate("liked",["email"])
+  let {_user} = req.params
+  Data.findOne({_user})
     .then((obj)=>{
       res.send(obj);
     })
     .catch((err)=>{
       res.status(500).send(err)
-    })
-})
-router.get("/member/:_member_id",(req,res)=>{
-  let {_member_id}=req.params;
-  Item.find({member:_member_id})
-    .populate("Member",["username","email"])
-    .then((data)=>{
-      res.send(data)
-    }).catch(()=>{
-      res.status(500).send("can't get data")
     })
 })
 
-router.post("/items",async(req,res)=>{
+router.post("/data",async(req,res)=>{
   //validation
-  const {error} = itemValidation(req.body)
+  const {error} = dataValidation(req.body)
   console.log(req.body)
   if (error) return res.status(400).send(error.details[0].message)
-  let {title,description,price}=req.body;
+  let {user,name,img,main,discard,p1,p2,p3,p4}=req.body;
   if(req.user.isVisitor()){
     return res.status(400).send("Only Admin can do this.")
   }
-  let newItem = new Item({
-    title,
-    description,
-    price,
-    liked:req.user._id,
+  let newData = new Data({
+    user,
+    name,
+    img,
+    main,
+    discard,
+    p1,
+    p2,
+    p3,
+    p4,
   })
   try{
-    await newItem.save();
-    res.status(200).send("New item saved")
+    await newData.save();
+    res.status(200).send("New data saved")
   }catch(err){
-    res.status(400).send("Fail to save item")
+    res.status(400).send("Fail to save data")
   }
 
 })
