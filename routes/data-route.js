@@ -32,14 +32,10 @@ router.post("/data",async(req,res)=>{
   const {error} = dataValidation(req.body)
   console.log(req.body)
   if (error) return res.status(400).send(error.details[0].message)
-  let {user,name,img,main,discard,p1,p2,p3,p4}=req.body;
-  if(req.user.isVisitor()){
-    return res.status(400).send("Only Admin can do this.")
-  }
+  let {user,name,main,discard,p1,p2,p3,p4}=req.body;
   let newData = new Data({
     user,
     name,
-    img,
     main,
     discard,
     p1,
