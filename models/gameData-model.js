@@ -11,7 +11,7 @@ const gameDataSchema = new mongoose.Schema({
     contentType:String,
   },
   date:{
-    type:String,
+    type:Number,
   },
   main:{
     type:Array,
