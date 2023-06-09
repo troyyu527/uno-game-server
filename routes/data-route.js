@@ -41,7 +41,7 @@ router.post("/data",async(req,res)=>{
   const {error} = dataValidation(req.body)
   console.log(req.body)
   if (error) return res.status(400).send(error.details[0].message)
-  let {user,index,name,date,main,discard,p1,p2,p3,p4}=req.body;
+  let {user,index,name,date,currentPlayer,currentPmain,discard,p1,p2,p3,p4}=req.body;
   let newData = new Data({
     user,
     index,

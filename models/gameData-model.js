@@ -16,6 +16,15 @@ const gameDataSchema = new mongoose.Schema({
   date:{
     type:Number,
   },
+  currentPlayer:{
+    type:String,
+  },
+  currentPlayerQueue:{
+    type:Array,
+  },
+  isReverse:{
+    type:Boolean,
+  },
   main:{
     type:Array,
   },
