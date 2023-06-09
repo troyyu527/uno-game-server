@@ -3,6 +3,9 @@ const gameDataSchema = new mongoose.Schema({
   user:{
     type:String,
   },
+  index:{
+    type:Number,  
+  },
   name:{
     type:String,
   },
