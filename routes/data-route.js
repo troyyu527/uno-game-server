@@ -25,6 +25,16 @@ router.get("/:_user",(req,res)=>{
       res.status(500).send(err)
     })
 })
+router.delete("/:_user",(req,res)=>{
+  let {_user} = req.params
+  Data.deleteMany({ user: _user })
+    .then(() => {
+      res.send("Data deleted successfully");
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+})
 
 router.post("/data",async(req,res)=>{
   //validation
