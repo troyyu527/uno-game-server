@@ -25,9 +25,9 @@ router.get("/:_user",(req,res)=>{
       res.status(500).send(err)
     })
 })
-router.delete("/:_user",(req,res)=>{
-  let {_user} = req.params
-  Data.deleteMany({ user: _user })
+router.delete("/:_user/:_index",(req,res)=>{
+  let {_user,_index} = req.params
+  Data.findOneAndDelete({ user: _user, index: _index })
     .then(() => {
       res.send("Data deleted successfully");
     })
