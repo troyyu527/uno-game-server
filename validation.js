@@ -31,6 +31,7 @@ const dataValidation = (data) =>{
   const schema = joi.object({
     user:joi.string().required(),
     name:joi.string().required(),
+    date:joi.string(),
     //img:joi.string(),
     main:joi.array(),
     discard:joi.array(),

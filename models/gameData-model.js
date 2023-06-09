@@ -10,6 +10,9 @@ const gameDataSchema = new mongoose.Schema({
     data:Buffer,
     contentType:String,
   },
+  date:{
+    type:String,
+  },
   main:{
     type:Array,
   },

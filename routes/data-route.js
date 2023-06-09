@@ -16,9 +16,8 @@ router.get("/",(req,res)=>{
     })
 })
 router.get("/:_user",(req,res)=>{
-  console.log("hello")
   let {_user} = req.params
-  Data.findOne({_user})
+  Data.find({user:_user})
     .then((obj)=>{
       res.send(obj);
     })
