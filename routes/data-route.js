@@ -39,7 +39,7 @@ router.delete("/:_user/:_index",(req,res)=>{
 router.post("/data",async(req,res)=>{
   //validation
   const {error} = dataValidation(req.body)
-  console.log(req.body)
+  console.log(req.body.length)
   if (error) return res.status(400).send(error.details[0].message)
   let {user,index,name,date,img,currentPlayer,currentPlayerQueue,isReverse,main,discard,p1,p2,p3,p4}=req.body;
   let newData = new Data({

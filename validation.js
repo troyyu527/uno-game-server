@@ -35,8 +35,8 @@ const dataValidation = (data) =>{
     date:joi.number(),
     img: joi
       .object({
-        data: joi.binary().required(),
-        contentType: joi.string().required(),
+        data: joi.binary(),
+        contentType: joi.string(),
       }),
     currentPlayer:joi.string(),
     currentPlayerQueue:joi.array(),
