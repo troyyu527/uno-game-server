@@ -33,7 +33,11 @@ const dataValidation = (data) =>{
     index:joi.number().required(),
     name:joi.string().required(),
     date:joi.number(),
-    //img:joi.string(),
+    img: joi
+      .object({
+        data: joi.binary().required(),
+        contentType: joi.string().required(),
+      }),
     currentPlayer:joi.string(),
     currentPlayerQueue:joi.array(),
     isReverse:joi.boolean(),
