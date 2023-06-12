@@ -47,7 +47,7 @@ router.post("/login",async (req,res)=>{
   const {error} = loginValidation(req.body);
   if(error) return res.status(400).send(error.details[0].message) 
   try{
-    const user = await User.findOne({ email: req.body.email }).exec();
+    const user = await User.findOne({ email: req.body.username }).exec();
     if (!user) {
       return res.status(401).send("User not found");
     }
