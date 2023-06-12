@@ -29,6 +29,7 @@ router.post("/register",async (req,res)=>{
     username:req.body.username,
     email:req.body.email,
     password:req.body.password,
+    gender:req.body.gender,
     role:req.body.role,
   });
   try{

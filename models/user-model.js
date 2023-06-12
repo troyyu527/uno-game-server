@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema({
     minLength:6,
     maxLength:1024,
   },
+  gender:{
+    type:String,
+    enum:["Male","Female","Secret"],
+    required:true
+  },
   role:{
     type:String,
     enum:["Admin","Member","Visitor"],

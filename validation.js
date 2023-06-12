@@ -5,6 +5,7 @@ const registerValidation = (data) =>{
     username:joi.string().min(3).max(50).required(),
     email:joi.string().min(6).max(50).required().email(),
     password:joi.string().min(6).max(255).required(),
+    gender:joi.string().required().valid("Male","Female","Secret"),
     role:joi.string().required().valid("Admin","Member","Visitor")
   });
   return schema.validate(data);
