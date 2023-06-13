@@ -103,16 +103,16 @@ router.patch("/modify",async (req,res)=>{
   }
 }) 
 //route to delete(delete)
-router.delete("/delete",async (req,res)=>{
-  const {error} = modifyValidation(req.body);
-  if(error) return res.status(400).send(error.details[0].message) 
+router.delete("/:user",async (req,res)=>{
   try{
-    const user = await User.findOneAndUpdate({ username: req.body.username },{$set:req.body},{new:true}).exec();
-    if (!user) {
-      return res.status(401).send("User not found");
-    }else{
-      return res.json(user);
+    const user = req.params.user;
+    const deletedUser = await User.findOneAndRemove({ username: user });
+    if (!deletedUser) {
+      // User not found
+      return res.status(404).json({ error: 'User not found' });
     }
+    // Return the deleted user
+    return res.json(deletedUser);
   } catch(err){
     res.status(400).send(err);
   }
