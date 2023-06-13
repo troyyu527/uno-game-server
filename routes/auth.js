@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const registerValidation = require("../validation").registerValidation
 const loginValidation = require("../validation").loginValidation
+const modifyValidation = require("../validation").modifyValidation
 const User = require("../models").userModel;
 const jwt =require("jsonwebtoken")
 
@@ -64,6 +65,7 @@ router.post("/login",async (req,res)=>{
   } catch(err){
     res.status(400).send(err);
   }
+ 
   // User.findOne({email:req.body.email},function (err,user){
   //   if(err){
   //     res.status(400).send(err)
@@ -84,5 +86,29 @@ router.post("/login",async (req,res)=>{
   //   }
   // })
 })
+
+//route to modify(patch)
+router.patch("/modify",async (req,res)=>{
+  const {error} = modifyValidation(req.body);
+  if(error) return res.status(400).send(error.details[0].message) 
+  try{
+    const user = await User.findOne({ username: req.body.username }).exec();
+    if (!user) {
+      return res.status(401).send("User not found");
+    }
+    const isMatch = await user.comparePassword(req.body.password,function(err,isMatch){
+      if(err) return res.status(400).send(err)
+      if(isMatch){
+        const tokenObj = {_id:user._id,email:user.email};
+        const token = jwt.sign(tokenObj,process.env.PASSPORT_SECRET)
+        res.send({success:true,token:"JWT "+token,user:user.username,email:user.email,gender:user.gender,role:user.role})
+      }else{
+        res.status(401).send("Wrong password.")
+      }
+    });
+  } catch(err){
+    res.status(400).send(err);
+  }
+}) 
 
 module.exports = router
