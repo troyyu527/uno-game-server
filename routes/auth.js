@@ -92,20 +92,27 @@ router.patch("/modify",async (req,res)=>{
   const {error} = modifyValidation(req.body);
   if(error) return res.status(400).send(error.details[0].message) 
   try{
-    const user = await User.findOne({ username: req.body.username }).exec();
+    const user = await User.findOneAndUpdate({ username: req.body.username },{$set:req.body},{new:true}).exec();
     if (!user) {
       return res.status(401).send("User not found");
+    }else{
+      return res.json(user);
     }
-    const isMatch = await user.comparePassword(req.body.password,function(err,isMatch){
-      if(err) return res.status(400).send(err)
-      if(isMatch){
-        const tokenObj = {_id:user._id,email:user.email};
-        const token = jwt.sign(tokenObj,process.env.PASSPORT_SECRET)
-        res.send({success:true,token:"JWT "+token,user:user.username,email:user.email,gender:user.gender,role:user.role})
-      }else{
-        res.status(401).send("Wrong password.")
-      }
-    });
+  } catch(err){
+    res.status(400).send(err);
+  }
+}) 
+//route to delete(delete)
+router.delete("/delete",async (req,res)=>{
+  const {error} = modifyValidation(req.body);
+  if(error) return res.status(400).send(error.details[0].message) 
+  try{
+    const user = await User.findOneAndUpdate({ username: req.body.username },{$set:req.body},{new:true}).exec();
+    if (!user) {
+      return res.status(401).send("User not found");
+    }else{
+      return res.json(user);
+    }
   } catch(err){
     res.status(400).send(err);
   }
