@@ -70,32 +70,21 @@ router.post("/login",async (req,res)=>{
 })
 
 //route to modify(patch)
-router.patch("/modify/:_id",async (req,res)=>{
-  const {error} = modifyValidation(req.body);
-  //let _id = req.params._id;
-  if(error) return res.status(400).send(error.details[0].message) 
-  
-      
-  const modifyUser = req.body
-  try{
-      bcrypt.hash(modifyUser.password, 10)
-      .then(hash => {
-        // Update the password field in the document with the hashed password
-        modifyUser.password = hash;
-      });
-      User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).exec()
-      .then((res)=>{
-        return res.status(200).send("Data modified")
-      })
-    if (!user) {
-      return res.status(401).send("User not found");
-    }else{
-      return res.json(user);
-    }
-  } catch(err){
-    res.status(400).send(err);
+router.patch("/modify/:_id", async (req, res) => {
+  const { error } = modifyValidation(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const modifyUser = req.body;
+  try {
+    const hash = await bcrypt.hash(modifyUser.password, 10);
+    modifyUser.password = hash;
+
+    const updatedUser = await User.findByIdAndUpdate(req.params._id, { $set: modifyUser }, { new: true }).exec();
+    return res.status(200).send("Data modified");
+  } catch (err) {
+    return res.status(400).send(err);
   }
-}) 
+});
 //route to delete(delete)
 router.delete("/:user",async (req,res)=>{
   try{
