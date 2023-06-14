@@ -68,7 +68,18 @@ router.post("/login",async (req,res)=>{
   }
  
 })
-
+//route to get User original password
+router.get("/:_id"/"password",async (req,res)=>{
+  let {_id} = req.params
+  User.find({_id:_id})
+    .then((obj)=>{
+      obj.password
+      res.send(obj);
+    })
+    .catch((err)=>{
+      res.status(500).send(err)
+    })
+})
 //route to modify(patch)
 router.patch("/modify/:_id", async (req, res) => {
   const { error } = modifyValidation(req.body);
