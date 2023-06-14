@@ -88,11 +88,11 @@ router.post("/login",async (req,res)=>{
 })
 
 //route to modify(patch)
-router.patch("/modify",async (req,res)=>{
+router.patch("/modify/:_id",async (req,res)=>{
   const {error} = modifyValidation(req.body);
   if(error) return res.status(400).send(error.details[0].message) 
   try{
-    const user = await User.findOneAndUpdate({ username: req.body.username },{$set:req.body},{new:true}).exec();
+    const user = await User.findByIdAndUpdate(req.body.id,{$set:req.body},{new:true}).exec();
     if (!user) {
       return res.status(401).send("User not found");
     }else{
@@ -106,7 +106,7 @@ router.patch("/modify",async (req,res)=>{
 router.delete("/:user",async (req,res)=>{
   try{
     const user = req.params.user;
-    const deletedUser = await User.findOneAndRemove({ username: user });
+    const deletedUser = await User.findOneAndRemove({ username: user }).exec();
     if (!deletedUser) {
       // User not found
       return res.status(404).json({ error: 'User not found' });
