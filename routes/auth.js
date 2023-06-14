@@ -97,10 +97,11 @@ router.patch("/modify/:_id", async (req, res) => {
   }
 });
 //route to delete(delete)
-router.delete("/:user",async (req,res)=>{
+router.delete("/delete/:_id",async (req,res)=>{
+  const userID = req.params._id;
   try{
-    const user = req.params.user;
-    const deletedUser = await User.findOneAndRemove({ username: user }).exec();
+    
+    const deletedUser = await User.findOneAndRemove(userID).exec();
     if (!deletedUser) {
       // User not found
       return res.status(404).json({ error: 'User not found' });
