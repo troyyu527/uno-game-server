@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require('bcrypt');
 const registerValidation = require("../validation").registerValidation
 const loginValidation = require("../validation").loginValidation
 const modifyValidation = require("../validation").modifyValidation
@@ -66,25 +67,6 @@ router.post("/login",async (req,res)=>{
     res.status(400).send(err);
   }
  
-  // User.findOne({email:req.body.email},function (err,user){
-  //   if(err){
-  //     res.status(400).send(err)
-  //   }
-  //   if(!user){
-  //     res.status(401).send("User not found")
-  //   }else{
-  //     user.comparePassword(req.body.password,function(err,isMatch){
-  //       if(err) return res.status(400).send(err)
-  //       if(isMatch){
-  //         const tokenObj = {_id:user._id,email:user.email};
-  //         const token = jwt.sign(tokenObj,process.env.PASSPORT_SECRET)
-  //         res.send({success:true,token:"JWT"+token,user})
-  //       }else{
-  //         res.status(401).send("Wrong password.")
-  //       }
-  //     })
-  //   }
-  // })
 })
 
 //route to modify(patch)
@@ -92,15 +74,19 @@ router.patch("/modify/:_id",async (req,res)=>{
   const {error} = modifyValidation(req.body);
   //let _id = req.params._id;
   if(error) return res.status(400).send(error.details[0].message) 
-  const modifyUser = new User({
-    username:req.body.username,
-    email:req.body.email,
-    password:req.body.password,
-    gender:req.body.gender,
-  });
+  
+      
+  const modifyUser = req.body
   try{
-    
-          await User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).save();
+      bcrypt.hash(modifyUser.password, 10)
+      .then(hash => {
+        // Update the password field in the document with the hashed password
+        modifyUser.password = hash;
+      });
+      User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).exec()
+      .then((res)=>{
+        return res.status(200).send("Data modified")
+      })
     if (!user) {
       return res.status(401).send("User not found");
     }else{
