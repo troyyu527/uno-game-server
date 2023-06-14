@@ -21,10 +21,10 @@ const loginValidation = (data) =>{
 
 const modifyValidation = (data) =>{
   const schema = joi.object({
-    username:joi.string().min(3).max(50),
-    email:joi.string().min(6).max(50).email(),
-    password:joi.string().min(6).max(255),
-    gender:joi.string().valid("Male","Female","Secret"),
+    username:joi.string().min(3).max(50).required(),
+    email:joi.string().min(6).max(50).email().required(),
+    password:joi.string().min(6).max(255).required(),
+    gender:joi.string().valid("Male","Female","Secret").required(),
   });
   return schema.validate(data);
 }
