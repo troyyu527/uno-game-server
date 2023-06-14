@@ -57,7 +57,7 @@ router.post("/login",async (req,res)=>{
       if(isMatch){
         const tokenObj = {_id:user._id,email:user.email};
         const token = jwt.sign(tokenObj,process.env.PASSPORT_SECRET)
-        res.send({success:true,token:"JWT "+token,user:user.username,email:user.email,gender:user.gender,role:user.role})
+        res.send({success:true,token:"JWT "+token,user:user._id,user:user.username,email:user.email,gender:user.gender,role:user.role})
       }else{
         res.status(401).send("Wrong password.")
       }
@@ -90,9 +90,10 @@ router.post("/login",async (req,res)=>{
 //route to modify(patch)
 router.patch("/modify/:_id",async (req,res)=>{
   const {error} = modifyValidation(req.body);
+  //let _id = req.params._id;
   if(error) return res.status(400).send(error.details[0].message) 
   try{
-    const user = await User.findByIdAndUpdate(req.body.id,{$set:req.body},{new:true}).exec();
+    const user = await User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).exec();
     if (!user) {
       return res.status(401).send("User not found");
     }else{
