@@ -92,8 +92,15 @@ router.patch("/modify/:_id",async (req,res)=>{
   const {error} = modifyValidation(req.body);
   //let _id = req.params._id;
   if(error) return res.status(400).send(error.details[0].message) 
+  const modifyUser = new User({
+    username:req.body.username,
+    email:req.body.email,
+    password:req.body.password,
+    gender:req.body.gender,
+  });
   try{
-    const user = await User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).exec();
+    
+          await User.findByIdAndUpdate(req.params._id,{$set:req.body},{new:true}).save();
     if (!user) {
       return res.status(401).send("User not found");
     }else{
