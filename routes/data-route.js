@@ -35,6 +35,26 @@ router.delete("/:_user/:_index",(req,res)=>{
       res.status(500).send(err);
     });
 })
+router.delete("/:_user", (req, res) => {
+  let { _user } = req.params;
+  Data.find({ user: _user })
+    .then((data) => {
+      if (data.length === 0) {
+        res.status(404).send("No matching data found");
+      } else {
+        Data.deleteMany({ user: _user })
+          .then(() => {
+            res.send("Data deleted successfully");
+          })
+          .catch((err) => {
+            res.status(500).send(err);
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
+});
 
 router.post("/data",async(req,res)=>{
   //validation
