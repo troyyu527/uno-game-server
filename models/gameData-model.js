@@ -9,10 +9,6 @@ const gameDataSchema = new mongoose.Schema({
   name:{
     type:String,
   },
-  img:{
-    data:Buffer,
-    contentType:String,
-  },
   date:{
     type:Number,
   },

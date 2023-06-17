@@ -47,7 +47,6 @@ router.post("/data",async(req,res)=>{
     index,
     name,
     date,
-    img,
     currentPlayer,
     currentPlayerQueue,
     isReverse,
